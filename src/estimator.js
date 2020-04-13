@@ -1,17 +1,13 @@
 const covid19ImpactEstimator = (data) => {
-  // Destructure the data object
-
   // Infected not severe
-  const currentlyInfected = ({ reportedCases }) => reportedCases * 10;
+  const currentlyInfected = ({ reportedCases }, notSevereImpact) => (notSevereImpact
+    ? reportedCases * 10 : reportedCases * 50);
   const infectionsByRequestedTime = (curInfected = currentlyInfected()) => curInfected * 512;
   const severeCasesByRequestedTime = (infec = infectionsByRequestedTime()) => Math.trunc(
     0.15 * infec
   );
   const hospitalBedsByRequestedTime = ({ totalHospitalBeds }, sev =
   severeCasesByRequestedTime()) => (Math.trunc(0.35 * totalHospitalBeds) - sev);
-
-  // Infected and Severe Cases.
-  const currentlyInfectedSevere = ({ reportedCases }) => reportedCases * 50;
 
 
   const notSevereImpact = {
@@ -22,7 +18,7 @@ const covid19ImpactEstimator = (data) => {
   };
 
   const severeCasesImpact = {
-    currentlyInfected: currentlyInfectedSevere,
+    currentlyInfected,
     infectionsByRequestedTime,
     severeCasesByRequestedTime,
     hospitalBedsByRequestedTime
