@@ -89,14 +89,14 @@ const casesForVentilatorsByRequestedTime = (infected) => {
 // Daily Economic Impact of the pandemic outbreak.
 const dolarInFlight = (region,
   timePeriod, infected) => {
-  const impact = Math.trunc(
-    (infected.impact * region.avgDailyIncomeInUSD * region.avgDailyIncomePopulation)
-    / timePeriod
-  );
-  const severeImpact = Math.trunc(
-    (infected.severeImpact * region.avgDailyIncomeInUSD * region.avgDailyIncomePopulation)
-    / timePeriod
-  );
+  const impact = (
+    Math.trunc((infected.impact * region.avgDailyIncomeInUSD * region.avgDailyIncomePopulation)
+    / timePeriod));
+
+  const severeImpact = (
+    Math.trunc((infected.severeImpact * region.avgDailyIncomeInUSD
+      * region.avgDailyIncomePopulation) / timePeriod));
+
   return {
     impact,
     severeImpact
@@ -126,29 +126,34 @@ const covid19ImpactEstimator = (data) => {
   // challange 3:
   const step5 = casesForICUByRequestedTime(step2);
   const step6 = casesForVentilatorsByRequestedTime(step2);
-  const step7 = dolarInFlight(region, timeToElapse, step2);
+  const step7 = dolarInFlight(region, timePeriod.duration, step2);
+
+  // compilation
+  const impact = {
+    currentlyInfected: step1.impact,
+    infectionsByRequestedTime: step2.impact,
+    severeCasesByRequestedTime: step3.impact,
+    hospitalBedsByRequestedTime: step4.impact,
+    casesForICUByRequestedTime: step5.impact,
+    casesForVentilatorsByRequestedTime: step6.impact,
+    dolarInFlight: step7.impact
+  };
+
+  const severeImpact = {
+    currentlyInfected: step1.severeImpact,
+    infectionsByRequestedTime: step2.severeImpact,
+    severeCasesByRequestedTime: step3.severeImpact,
+    hospitalBedsByRequestedTime: step4.severeImpact,
+    casesForICUByRequestedTime: step5.severeImpact,
+    casesForVentilatorsByRequestedTime: step6.severeImpact,
+    dolarInFlight: step7.severeImpact
+  };
 
 
   return {
     data,
-    impact: {
-      currentlyInfected: step1.impact,
-      infectionsByRequestedTime: step2.impact,
-      severeCasesByRequestedTime: step3.impact,
-      hospitalBedsByRequestedTime: step4.impact,
-      casesForICUByRequestedTime: step5.impact,
-      casesForVentilatorsByRequestedTime: step6.impact,
-      dolarInFlight: step7.impact
-    },
-    severeImpact: {
-      currentlyInfected: step1.severeImpact,
-      infectionsByRequestedTime: step2.severeImpact,
-      severeCasesByRequestedTime: step3.severeImpact,
-      hospitalBedsByRequestedTime: step4.severeImpact,
-      casesForICUByRequestedTime: step5.severeImpact,
-      casesForVentilatorsByRequestedTime: step6.severeImpact,
-      dolarInFlight: step7.severeImpact
-    }
+    impact,
+    severeImpact
   };
 };
 

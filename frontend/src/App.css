@@ -1,0 +1,39 @@
+.navbar-fixed-top {
+  min-height: 80px;
+  background-color: #036eb1;
+  width: 100% !important;
+}
+
+.navbar > h1 {
+  line-height: 80px; 
+  font-size: 48px; 
+  color:#f8c066;
+  font-family: 'Baloo', cursive; 
+}
+#myApp, p {
+  font-family: 'Noto Sans', sans-serif; 
+}
+
+form {
+  height:200px; 
+  font-size: 24pt;
+  margin-top: 40px;
+  text-align: center;
+  color: #036eb1;
+}
+
+input[type=text] {
+  color: #e4455d;
+}
+
+#myBtn {
+  background-color: #036eb1;
+  color: #f8c066;
+  
+}
+
+#userInfo {
+  text-align: center; 
+  font-family: 'Noto Sans', sans-serif; 
+  color: #036eb1;
+}
