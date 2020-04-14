@@ -91,11 +91,11 @@ const dolarInFlight = (region,
   timePeriod, infected) => {
   const impact = Math.trunc(
     (infected.impact * region.avgDailyIncomeInUSD * region.avgDailyIncomePopulation)
-    / timePeriod.duration
+    / timePeriod
   );
   const severeImpact = Math.trunc(
     (infected.severeImpact * region.avgDailyIncomeInUSD * region.avgDailyIncomePopulation)
-    / timePeriod.duration
+    / timePeriod
   );
   return {
     impact,
@@ -126,7 +126,7 @@ const covid19ImpactEstimator = (data) => {
   // challange 3:
   const step5 = casesForICUByRequestedTime(step2);
   const step6 = casesForVentilatorsByRequestedTime(step2);
-  const step7 = dolarInFlight(region, timePeriod, step2);
+  const step7 = dolarInFlight(region, timeToElapse, step2);
 
 
   return {
