@@ -23,10 +23,14 @@ const periodInDays = ({ periodType, timeToElapse }) => {
 
 // Challange 1.
 // Trajectory calculation for both severe and non severe cases: DRY code
-const currentlyInfected = ({ reportedCases }) => ({
-  impact: reportedCases * 10,
-  severeImpact: reportedCases * 50
-});
+const currentlyInfected = ({ reportedCases }) => {
+  const impact = reportedCases * 10;
+  const severeImpact = reportedCases * 50;
+  return {
+    impact,
+    severeImpact
+  };
+};
 
 // Predicting the infection rate per given duration
 const infectionsByRequestedTime = (infected = currentlyInfected) => {
