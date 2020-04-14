@@ -58,8 +58,8 @@ const severeCasesByRequestedTime = (infected) => {
 };
 // hopital bed capacity
 const hospitalBedsByRequestedTime = (totalHospitalBeds, severe) => {
-  const impact = (Math.trunc(0.35 * totalHospitalBeds) - severe.impact);
-  const severeImpact = (Math.trunc(0.35 * totalHospitalBeds) - severe.severeImpact);
+  const impact = Math.trunc((0.35 * totalHospitalBeds) - severe.impact);
+  const severeImpact = Math.trunc((0.35 * totalHospitalBeds) - severe.severeImpact);
   return {
     impact,
     severeImpact
