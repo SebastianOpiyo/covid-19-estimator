@@ -31,26 +31,47 @@ const covid19ImpactEstimator = (data) => {
   };
 
   // Severe cases that need hospitalization
-  const severeCasesByRequestedTime = (infec = infectionsByRequestedTime()) => Math.trunc(
-    0.15 * infec
+  const severeCasesByRequestedTime = (infected = infectionsByRequestedTime()) => Math.trunc(
+    0.15 * infected
   );
+
   // hopital bed capacity
   const hospitalBedsByRequestedTime = ({ totalHospitalBeds }, sev =
   severeCasesByRequestedTime()) => (Math.trunc(0.35 * totalHospitalBeds) - sev);
 
-  // Need to refine challage 2
+  // Cases for ICU
+  const casesForICUByRequestedTime = (infected = infectionsByRequestedTime()) => Math.trunc(
+    0.05 * infected
+  );
+
+  // Cases in need of ventilators
+  const casesForVentilatorsByRequestedTime = (infected = infectionsByRequestedTime()) => (
+    Math.trunc(0.02 * infected));
+
+  // Daily Economic Impact of the pandemic outbreak.
+  const dolarInFlight = ({ avgDailyIncomeInUSD, avgDailyIncomePopulation },
+    period = periodInDays(), infected = infectionsByRequestedTime()) => Math.trunc(
+    (infected * avgDailyIncomeInUSD * avgDailyIncomePopulation) / period
+  );
+
   const notSevereImpact = {
     currentlyInfected,
     infectionsByRequestedTime,
     severeCasesByRequestedTime,
-    hospitalBedsByRequestedTime
+    hospitalBedsByRequestedTime,
+    casesForICUByRequestedTime,
+    casesForVentilatorsByRequestedTime,
+    dolarInFlight
   };
 
   const severeCasesImpact = {
     currentlyInfected,
     infectionsByRequestedTime,
     severeCasesByRequestedTime,
-    hospitalBedsByRequestedTime
+    hospitalBedsByRequestedTime,
+    casesForICUByRequestedTime,
+    casesForVentilatorsByRequestedTime,
+    dolarInFlight
   };
 
 
@@ -63,15 +84,3 @@ const covid19ImpactEstimator = (data) => {
 
 
 export default covid19ImpactEstimator;
-
-// challange 3
-/*
-1. Determine 5% of infectionsByRequestedTime =
-   severe +ve cases estimate for ICU : casesForICUByRequestedTime(estimation output)
-2. Determine 2% of infectionsByRequestedTime =
-  severe +ve for ventilators: casesForVentilatorsByRequestedTime
-3. With infected people result and avg income of the region estimate how much the economy
-   is about to lose daily over the given period of time: dolarInFlight
-*/
-
-//     "babel-jest": "^25.2.0",
