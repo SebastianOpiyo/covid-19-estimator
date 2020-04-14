@@ -2,21 +2,25 @@
 
 // Normalizing the timePeriod to Days
 const periodInDays = (periodType, timeToElapse) => {
+  let factor = 0;
   let duration = 0;
-  switch (periodType) {
+  switch (periodType === 'days') {
     case 'days':
       duration = timeToElapse;
+      factor = Math.trunc(timeToElapse / 3);
       break;
     case 'weeks':
       duration = timeToElapse * 7;
+      factor = Math.trunc((timeToElapse * 7) / 3);
       break;
     case 'months':
       duration = timeToElapse * 30;
+      factor = Math.trunc((timeToElapse * 30) / 3);
       break;
     default:
       duration = null;
   }
-  return duration;
+  return { factor, duration };
 };
 
 // COMPUTATION FOR COVID-19 ESTIMATIONS.
@@ -34,8 +38,8 @@ const currentlyInfected = (reportedCases) => {
 
 // Predicting the infection rate per given duration
 const infectionsByRequestedTime = (infected, timePeriod) => {
-  const impact = infected.impact * Math.trunc(2 ** (timePeriod / 3));
-  const severeImpact = infected.impact * Math.trunc(2 ** (timePeriod / 3));
+  const impact = infected.impact * (2 ** timePeriod.factor);
+  const severeImpact = infected.impact * (2 ** timePeriod.factor);
   return {
     impact,
     severeImpact
@@ -86,10 +90,10 @@ const casesForVentilatorsByRequestedTime = (infected) => {
 const dolarInFlight = (avgDailyIncomeInUSD, avgDailyIncomePopulation,
   timePeriod, infected) => {
   const impact = Math.trunc(
-    (infected.impact * avgDailyIncomeInUSD * avgDailyIncomePopulation) / timePeriod
+    (infected.impact * avgDailyIncomeInUSD * avgDailyIncomePopulation) / timePeriod.duration
   );
   const severeImpact = Math.trunc(
-    (infected.severeImpact * avgDailyIncomeInUSD * avgDailyIncomePopulation) / timePeriod
+    (infected.severeImpact * avgDailyIncomeInUSD * avgDailyIncomePopulation) / timePeriod.duration
   );
   return {
     impact,
