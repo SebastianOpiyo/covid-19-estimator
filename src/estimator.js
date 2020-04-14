@@ -9,8 +9,8 @@ const covid19ImpactEstimator = (data) => {
   const hospitalBedsByRequestedTime = ({ totalHospitalBeds }, sev =
   severeCasesByRequestedTime()) => (Math.trunc(0.35 * totalHospitalBeds) - sev);
 
-// Missing days, weeks, or months incorporation
-// Need to refine challage 2
+  // Missing days, weeks, or months incorporation
+  // Need to refine challage 2
   const notSevereImpact = {
     currentlyInfected,
     infectionsByRequestedTime,
@@ -40,10 +40,10 @@ export default covid19ImpactEstimator;
 /*
 1. Determine 5% of infectionsByRequestedTime =
    severe +ve cases estimate for ICU : casesForICUByRequestedTime(estimation output)
-2. Determine 2% of infectionsByRequestedTime = 
+2. Determine 2% of infectionsByRequestedTime =
   severe +ve for ventilators: casesForVentilatorsByRequestedTime
-3. With infected people result and avg income of the region estimate how much the economy 
-   is about to lose daily over the given period of time: dolarInFlight  
+3. With infected people result and avg income of the region estimate how much the economy
+   is about to lose daily over the given period of time: dolarInFlight
 */
 
 //     "babel-jest": "^25.2.0",
