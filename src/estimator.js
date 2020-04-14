@@ -89,12 +89,13 @@ const casesForVentilatorsByRequestedTime = (infected) => {
 // Daily Economic Impact of the pandemic outbreak.
 const dolarInFlight = (region,
   timePeriod, infected) => {
-  const { avgDailyIncomeInUSD, avgDailyIncomePopulation } = region;
   const impact = Math.trunc(
-    (infected.impact * avgDailyIncomeInUSD * avgDailyIncomePopulation) / timePeriod.duration
+    (infected.impact * region.avgDailyIncomeInUSD * region.avgDailyIncomePopulation)
+    / timePeriod.duration
   );
   const severeImpact = Math.trunc(
-    (infected.severeImpact * avgDailyIncomeInUSD * avgDailyIncomePopulation) / timePeriod.duration
+    (infected.severeImpact * region.avgDailyIncomeInUSD * region.avgDailyIncomePopulation)
+    / timePeriod.duration
   );
   return {
     impact,
