@@ -1,11 +1,20 @@
+import periodInDays from './dayCalc';
+
 const covid19ImpactEstimator = (data) => {
-  // Infected not severe
+  // Trajectory calculation for both severe and non severe cases: DRY code
   const currentlyInfected = ({ reportedCases }, notSevereImpact) => (notSevereImpact
     ? reportedCases * 10 : reportedCases * 50);
-  const infectionsByRequestedTime = (curInfected = currentlyInfected()) => curInfected * 512;
+
+  // Predicting the infection rate per given duration
+  const infectionsByRequestedTime = (curInfected = currentlyInfected()) => {
+    const timePeriod = periodInDays();
+    return curInfected * Math.trunc((2 ** (timePeriod / 3)));
+  };
+
   const severeCasesByRequestedTime = (infec = infectionsByRequestedTime()) => Math.trunc(
     0.15 * infec
   );
+  // hopital bed capacity
   const hospitalBedsByRequestedTime = ({ totalHospitalBeds }, sev =
   severeCasesByRequestedTime()) => (Math.trunc(0.35 * totalHospitalBeds) - sev);
 
