@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Covid-19 impact estimator">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Covid-19 impact estimator</title>
+    <link href="./frontend/src/index.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(rgba(7, 7, 7, 0.8), rgba(7, 7, 7, 0.8)), url("./frontend/images_unsplash_com-photo-1579781403289-674275bc71c5.webp") no-repeat center;
+            background-color: #202020;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid" style="min-height: 100vh;">
+        <main class="container">
+            <h1 class="text-danger text-center mt-4 mb-5">Covid-19 Impact Estimator</h1>
+            <div class='row'>
+                <div class='col-md-4'></div>
+                <form class='col-md-4 mb-5 p-3 bg-white text-danger border border-danger rounded' id='estimatorForm'
+                    onsubmit="estimate()">
+                    <div class="row m-1 p-1 border border-black rounded">
+                        <div class="col">
+                            <p class="text-center">Region Info</p>
+                            <div class="form-group">
+                                <label for="inputRegionName">Name</label>
+                                <input type="text" class="form-control" id="inputRegionName" name="RegionName"
+                                    placeholder="Lagos">
+                                <small id="regionNameHelpBlock" class="form-text text-muted">
+                                    Name of region you are estimating for.
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPopulation">Region's Population</label>
+                                <input type="number" class="form-control" id="inputPopulation" name="population"
+                                    placeholder="0" data-population>
+                                <small id="PopulationHelpBlock" class="form-text text-muted">
+                                    Region's population.
+                                </small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputAverageAge">Average age</label>
+                                <input type="number" class="form-control" id="inputAverageAge" name="AverageAge"
+                                    placeholder="0">
+                                <small id="averageAgeHelpBlock" class="form-text text-muted">
+                                    Average age of region's population.
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputAverageDailyIncome">Average daily income in USD</label>
+                                <input type="number" class="form-control" id="inputAverageDailyIncome"
+                                    name="AverageDailyIncome" placeholder="0">
+                                <small id="averageDailyIncomeHelpBlock" class="form-text text-muted">
+                                    Average daily income of region's population in US Dollars.
+                                </small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputAverageDailyIncomePopulation">Average daily income population
+                                    percentage</label>
+                                <input type="number" class="form-control" id="inputAverageDailyIncomePopulation"
+                                    name="AverageDailyIncomePopulation" placeholder="0" min="50" max="100">
+                                <small id="averageDailyIncomePopulationHelpBlock" class="form-text text-muted">
+                                    Percentage of population that earn average daily income
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row m-1 mt-3 mb-3 pt-1 pb-1 border border-black rounded">
+                        <div class="col">
+                            <p class="text-center">Infection Info</p>
+                            <div class="form-group">
+                                <label for="inputReportedCases">Reported Cases</label>
+                                <input type="number" class="form-control" id="inputReportedCases" name="ReportedCases"
+                                    placeholder="0" data-reported-cases>
+                                <small id="reportedCasesHelpBlock" class="form-text text-muted">
+                                    Official number of confirmed Covid-19 cases.
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputTotalHospitalBeds">Total Hospital Beds</label>
+                                <input type="number" class="form-control" id="inputTotalHospitalBeds"
+                                    name="totalHospitalBeds" placeholder="0" data-total-hospital-beds>
+                                <small id="totalHospitalBedsHelpBlock" class="form-text text-muted">
+                                    Total number of hospital beds in Region.
+                                </small>
+                            </div>
+
+                            <fieldset>
+                                <legend>Estimation Period</legend>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-6">
+                                        <label for="inputPeriod">Period</label>
+                                        <input type="number" class="form-control" id="inputPeriod" name="period"
+                                            placeholder="0" data-time-to-elapse>
+                                    </div>
+
+                                    <div class="form-group col-sm-6">
+                                        <label for="inputPeriodType">Type</label>
+                                        <select type="select" class="form-control" id="inputPeriodType"
+                                            name="periodType" data-period-type>
+                                            <option value="days">Days</option>
+                                            <option value="weeks">Weeks</option>
+                                            <option value="months">Months</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <small id="estimationPeriodHelpBlock" class="form-text text-muted">
+                                    Period to use for estimation.
+                                </small>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger" data-go-estimate>Submit</button>
+                </form>
+                <div class='col-md-4'></div>
+            </div>
+            <div id='results'></div>
+        </main>
+    </div>
+
+    <script src="./frontend/page.js"></script>
+</body>
+
+</html>

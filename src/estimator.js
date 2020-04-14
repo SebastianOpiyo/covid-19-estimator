@@ -76,6 +76,7 @@ const casesForICUByRequestedTime = (infected) => {
     severeImpact
   };
 };
+
 // Cases in need of ventilators
 const casesForVentilatorsByRequestedTime = (infected) => {
   const impact = Math.trunc(0.02 * infected.impact);
@@ -87,7 +88,7 @@ const casesForVentilatorsByRequestedTime = (infected) => {
 };
 
 // Daily Economic Impact of the pandemic outbreak.
-const dolarInFlight = (region,
+const dolarsInFlight = (region,
   timePeriod, infected) => {
   const impact = (
     Math.trunc((infected.impact * region.avgDailyIncomeInUSD * region.avgDailyIncomePopulation)
@@ -126,7 +127,7 @@ const covid19ImpactEstimator = (data) => {
   // challange 3:
   const step5 = casesForICUByRequestedTime(step2);
   const step6 = casesForVentilatorsByRequestedTime(step2);
-  const step7 = dolarInFlight(region, timePeriod.duration, step2);
+  const step7 = dolarsInFlight(region, timePeriod.duration, step2);
 
   // compilation
   const impact = {
@@ -136,7 +137,7 @@ const covid19ImpactEstimator = (data) => {
     hospitalBedsByRequestedTime: step4.impact,
     casesForICUByRequestedTime: step5.impact,
     casesForVentilatorsByRequestedTime: step6.impact,
-    dolarInFlight: step7.impact
+    dolarsInFlight: step7.impact
   };
 
   const severeImpact = {
@@ -146,7 +147,7 @@ const covid19ImpactEstimator = (data) => {
     hospitalBedsByRequestedTime: step4.severeImpact,
     casesForICUByRequestedTime: step5.severeImpact,
     casesForVentilatorsByRequestedTime: step6.severeImpact,
-    dolarInFlight: step7.severeImpact
+    dolarsInFlight: step7.severeImpact
   };
 
 
