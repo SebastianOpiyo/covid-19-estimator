@@ -4,21 +4,22 @@
 const periodInDays = (periodType, timeToElapse) => {
   let factor = 0;
   let duration = 0;
-  switch (periodType === 'days') {
+  const time = periodType.toString().toLowercase();
+  switch (time) {
     case 'days':
       duration = timeToElapse;
-      factor = Math.trunc(timeToElapse / 3);
+      factor = Math.trunc(duration / 3);
       break;
     case 'weeks':
       duration = timeToElapse * 7;
-      factor = Math.trunc((timeToElapse * 7) / 3);
+      factor = Math.trunc(duration / 3);
       break;
     case 'months':
       duration = timeToElapse * 30;
-      factor = Math.trunc((timeToElapse * 30) / 3);
+      factor = Math.trunc(duration / 3);
       break;
     default:
-      duration = null;
+      break;
   }
   return { factor, duration };
 };
@@ -26,7 +27,7 @@ const periodInDays = (periodType, timeToElapse) => {
 // COMPUTATION FOR COVID-19 ESTIMATIONS.
 
 // Challange 1.
-// Trajectory calculation for both severe and non severe cases: DRY code
+// Trajectory calculation for both severe and non severe cases
 const currentlyInfected = (reportedCases) => {
   const impact = reportedCases * 10;
   const severeImpact = reportedCases * 50;
@@ -39,7 +40,7 @@ const currentlyInfected = (reportedCases) => {
 // Predicting the infection rate per given duration
 const infectionsByRequestedTime = (infected, timePeriod) => {
   const impact = infected.impact * (2 ** timePeriod.factor);
-  const severeImpact = infected.impact * (2 ** timePeriod.factor);
+  const severeImpact = infected.severeImpact * (2 ** timePeriod.factor);
   return {
     impact,
     severeImpact
