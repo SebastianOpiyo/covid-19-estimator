@@ -1,4 +1,23 @@
-import periodInDays from './dayCalc';
+// import periodInDays from "./dayCalc";
+
+// Normalizing the timePeriod to Days
+const periodInDays = ({ periodType, timeToElapse }) => {
+  let duration = 0;
+  switch (periodType) {
+    case 'DAYS':
+      duration = timeToElapse;
+      break;
+    case 'WEEKS':
+      duration = timeToElapse * 7;
+      break;
+    case 'MONTHS':
+      duration = timeToElapse * 30;
+      break;
+    default:
+      duration = null;
+  }
+  return duration;
+};
 
 const covid19ImpactEstimator = (data) => {
   // Trajectory calculation for both severe and non severe cases: DRY code
@@ -11,6 +30,7 @@ const covid19ImpactEstimator = (data) => {
     return curInfected * Math.trunc((2 ** (timePeriod / 3)));
   };
 
+  // Severe cases that need hospitalization
   const severeCasesByRequestedTime = (infec = infectionsByRequestedTime()) => Math.trunc(
     0.15 * infec
   );
@@ -18,7 +38,6 @@ const covid19ImpactEstimator = (data) => {
   const hospitalBedsByRequestedTime = ({ totalHospitalBeds }, sev =
   severeCasesByRequestedTime()) => (Math.trunc(0.35 * totalHospitalBeds) - sev);
 
-  // Missing days, weeks, or months incorporation
   // Need to refine challage 2
   const notSevereImpact = {
     currentlyInfected,
