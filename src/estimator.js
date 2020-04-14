@@ -4,17 +4,17 @@
 const periodInDays = ({ periodType, timeToElapse }) => {
   let duration = 0;
   switch (periodType) {
-    case 'DAYS':
+    case 'days':
       duration = timeToElapse;
       break;
-    case 'WEEKS':
+    case 'weeks':
       duration = timeToElapse * 7;
       break;
-    case 'MONTHS':
+    case 'months':
       duration = timeToElapse * 30;
       break;
     default:
-      duration = null;
+      duration = 0;
   }
   return duration;
 };
