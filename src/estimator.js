@@ -68,14 +68,10 @@ const hospitalBedsByRequestedTime = (totalHospitalBeds, severe) => {
 
 // Challange 3:
 // Cases for ICU
-const casesForICUByRequestedTime = (infected) => {
-  const impact = Math.trunc(0.05 * infected.impact);
-  const severeImpact = Math.trunc(0.05 * infected.severeImpact);
-  return {
-    impact,
-    severeImpact
-  };
-};
+const casesForICUByRequestedTime = (infected) => ({
+  impact: Math.trunc(0.05 * infected.impact),
+  severeImpact: Math.trunc(0.05 * infected.severeImpact)
+});
 
 // Cases in need of ventilators
 const casesForVentilatorsByRequestedTime = (infected) => {
@@ -88,15 +84,22 @@ const casesForVentilatorsByRequestedTime = (infected) => {
 };
 
 // Daily Economic Impact of the pandemic outbreak.
-const dolarsInFlight = (region,
-  timePeriod, infected) => {
+const dolarsInFlight = (region, timeToElapse, periodType, step2) => {
+  let timecount;
+  if (periodType === 'weeks') {
+    timecount = timeToElapse * 7;
+  } else if (periodType === 'months') {
+    timecount = timeToElapse * 30;
+  } else {
+    timecount = timeToElapse;
+  }
   const impact = (
-    Math.trunc((infected.impact * region.avgDailyIncomeInUSD * region.avgDailyIncomePopulation)
-    / timePeriod));
+    Math.trunc((step2.impact * region.avgDailyIncomeInUSD * region.avgDailyIncomePopulation)
+    / timecount));
 
   const severeImpact = (
-    Math.trunc((infected.severeImpact * region.avgDailyIncomeInUSD
-      * region.avgDailyIncomePopulation) / timePeriod));
+    Math.trunc((step2.severeImpact * region.avgDailyIncomeInUSD
+      * region.avgDailyIncomePopulation) / timecount));
 
   return {
     impact,
@@ -127,7 +130,7 @@ const covid19ImpactEstimator = (data) => {
   // challange 3:
   const step5 = casesForICUByRequestedTime(step2);
   const step6 = casesForVentilatorsByRequestedTime(step2);
-  const step7 = dolarsInFlight(region, timePeriod.duration, step2);
+  const step7 = dolarsInFlight(region, timeToElapse, periodType, step2);
 
   // compilation
   const impact = {

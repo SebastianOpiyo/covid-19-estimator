@@ -1,5 +1,5 @@
 import React from 'react';
-import './index.css';
+import './App.css';
 
 class App extends React.Component {
 
@@ -23,7 +23,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="container-fluid" >
-        <h1 className="text-danger text-center mt-4 mb-5">Covid-19 Estimator</h1>
+        <h1 className="text-danger text-center mt-4 mb-5">Covid-19 Impact Assessment Estimator</h1>
         <main>
 
         </main>
