@@ -4,8 +4,7 @@
 const periodInDays = (periodType, timeToElapse) => {
   let factor = 0;
   let duration = 0;
-  const time = periodType.toString().toLowercase();
-  switch (time) {
+  switch (periodType) {
     case 'days':
       duration = timeToElapse;
       factor = Math.trunc(duration / 3);
