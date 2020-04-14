@@ -96,7 +96,7 @@ const dolarInFlight = ({ avgDailyIncomeInUSD, avgDailyIncomePopulation },
 };
 
 
-const covid19ImpactEstimator = (data) => {
+const covid19ImpactEstimator = ({ data }) => {
   // challange 1:
   const step1 = currentlyInfected;
   const step2 = infectionsByRequestedTime;
