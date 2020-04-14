@@ -1,7 +1,7 @@
 // import periodInDays from "./dayCalc";
 
 // Normalizing the timePeriod to Days
-const periodInDays = ({ periodType, timeToElapse }) => {
+const periodInDays = (periodType, timeToElapse) => {
   let duration = 0;
   switch (periodType) {
     case 'days':
@@ -14,7 +14,7 @@ const periodInDays = ({ periodType, timeToElapse }) => {
       duration = timeToElapse * 30;
       break;
     default:
-      duration = 0;
+      duration = null;
   }
   return duration;
 };
@@ -23,7 +23,7 @@ const periodInDays = ({ periodType, timeToElapse }) => {
 
 // Challange 1.
 // Trajectory calculation for both severe and non severe cases: DRY code
-const currentlyInfected = ({ reportedCases }) => {
+const currentlyInfected = (reportedCases) => {
   const impact = reportedCases * 10;
   const severeImpact = reportedCases * 50;
   return {
@@ -33,8 +33,7 @@ const currentlyInfected = ({ reportedCases }) => {
 };
 
 // Predicting the infection rate per given duration
-const infectionsByRequestedTime = (infected = currentlyInfected) => {
-  const timePeriod = periodInDays();
+const infectionsByRequestedTime = (infected, timePeriod) => {
   const impact = infected.impact * Math.trunc(2 ** (timePeriod / 3));
   const severeImpact = infected.impact * Math.trunc(2 ** (timePeriod / 3));
   return {
@@ -45,7 +44,7 @@ const infectionsByRequestedTime = (infected = currentlyInfected) => {
 
 // Challange 2.
 // Severe cases that need hospitalization
-const severeCasesByRequestedTime = (infected = infectionsByRequestedTime()) => {
+const severeCasesByRequestedTime = (infected) => {
   const impact = Math.trunc(0.15 * infected.impact);
   const severeImpact = Math.trunc(0.15 * infected.severeImpact);
   return {
@@ -54,10 +53,9 @@ const severeCasesByRequestedTime = (infected = infectionsByRequestedTime()) => {
   };
 };
 // hopital bed capacity
-const hospitalBedsByRequestedTime = ({ totalHospitalBeds }, sev =
-severeCasesByRequestedTime()) => {
-  const impact = (Math.trunc(0.35 * totalHospitalBeds) - sev.impact);
-  const severeImpact = (Math.trunc(0.35 * totalHospitalBeds) - sev.severeImpact);
+const hospitalBedsByRequestedTime = (totalHospitalBeds, severe) => {
+  const impact = (Math.trunc(0.35 * totalHospitalBeds) - severe.impact);
+  const severeImpact = (Math.trunc(0.35 * totalHospitalBeds) - severe.severeImpact);
   return {
     impact,
     severeImpact
@@ -66,7 +64,7 @@ severeCasesByRequestedTime()) => {
 
 // Challange 3:
 // Cases for ICU
-const casesForICUByRequestedTime = (infected = infectionsByRequestedTime()) => {
+const casesForICUByRequestedTime = (infected) => {
   const impact = Math.trunc(0.05 * infected.impact);
   const severeImpact = Math.trunc(0.05 * infected.severeImpact);
   return {
@@ -75,7 +73,7 @@ const casesForICUByRequestedTime = (infected = infectionsByRequestedTime()) => {
   };
 };
 // Cases in need of ventilators
-const casesForVentilatorsByRequestedTime = (infected = infectionsByRequestedTime()) => {
+const casesForVentilatorsByRequestedTime = (infected) => {
   const impact = Math.trunc(0.02 * infected.impact);
   const severeImpact = Math.trunc(0.02 * infected.severeImpact);
   return {
@@ -85,13 +83,13 @@ const casesForVentilatorsByRequestedTime = (infected = infectionsByRequestedTime
 };
 
 // Daily Economic Impact of the pandemic outbreak.
-const dolarInFlight = ({ avgDailyIncomeInUSD, avgDailyIncomePopulation },
-  period = periodInDays(), infected = infectionsByRequestedTime()) => {
+const dolarInFlight = (avgDailyIncomeInUSD, avgDailyIncomePopulation,
+  timePeriod, infected) => {
   const impact = Math.trunc(
-    (infected.impact * avgDailyIncomeInUSD * avgDailyIncomePopulation) / period
+    (infected.impact * avgDailyIncomeInUSD * avgDailyIncomePopulation) / timePeriod
   );
   const severeImpact = Math.trunc(
-    (infected.severeImpact * avgDailyIncomeInUSD * avgDailyIncomePopulation) / period
+    (infected.severeImpact * avgDailyIncomeInUSD * avgDailyIncomePopulation) / timePeriod
   );
   return {
     impact,
@@ -100,19 +98,30 @@ const dolarInFlight = ({ avgDailyIncomeInUSD, avgDailyIncomePopulation },
 };
 
 
-const covid19ImpactEstimator = ({ data }) => {
+const covid19ImpactEstimator = (data) => {
+  const {
+    region,
+    periodType,
+    timeToElapse,
+    reportedCases,
+    totalHospitalBeds
+  } = data;
+
+  const { avgDailyIncomeInUSD, avgDailyIncomePopulation } = region;
+
+  const timePeriod = periodInDays(periodType, timeToElapse);
   // challange 1:
-  const step1 = currentlyInfected;
-  const step2 = infectionsByRequestedTime;
+  const step1 = currentlyInfected(reportedCases);
+  const step2 = infectionsByRequestedTime(step1, timePeriod);
 
   // challange 2:
-  const step3 = severeCasesByRequestedTime;
-  const step4 = hospitalBedsByRequestedTime;
+  const step3 = severeCasesByRequestedTime(step2);
+  const step4 = hospitalBedsByRequestedTime(totalHospitalBeds, step3);
 
   // challange 3:
-  const step5 = casesForICUByRequestedTime;
-  const step6 = casesForVentilatorsByRequestedTime;
-  const step7 = dolarInFlight;
+  const step5 = casesForICUByRequestedTime(step2);
+  const step6 = casesForVentilatorsByRequestedTime(step2);
+  const step7 = dolarInFlight(step2, avgDailyIncomeInUSD, avgDailyIncomePopulation, timePeriod);
 
 
   return {
